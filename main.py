@@ -64,7 +64,7 @@ async def main():
                     time.sleep(6)
                     url_opened = urllib.request.urlopen(url_rec)
                     my_bytes = url_opened.read()
-                    my_str = my_bytes.decode('utf8')
+                    my_str = my_bytes.decode('utf-8')
                     url_opened.close()
 
                     if re.search(r'\bSwitch to reCAPTCHA\b', my_str):
@@ -84,8 +84,7 @@ async def main():
                 print('Got \'Sorry\'')
             else:
                 messages = await client.get_messages('Litecoin_click_bot')
-                url_rec = messages[0].reply_markup.rows[0].buttons[0]
-                print(url_rec)
+                url_rec = messages[0].reply_markup.rows[0].buttons[0].url
                 file = open('per10.txt')
                 file_content = file.read()
                 if file_content == url_rec:
@@ -96,7 +95,7 @@ async def main():
                         message_id = message2.id
                         from telethon.tl.functions.messages import GetBotCallbackAnswerRequest
 
-                        resp = client(GetBotCallbackAnswerRequest(
+                        resp = await client(GetBotCallbackAnswerRequest(
                             tegmo,
                             message_id,
                             data=button_data
